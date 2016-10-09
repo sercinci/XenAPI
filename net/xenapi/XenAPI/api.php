@@ -106,7 +106,8 @@ class RestAPI {
         'getavatar'                => 'public',
         'getconversation'          => 'private',
         'getconversations'         => 'private',
-        'getgroup'                 => 'public', 
+        'getgroup'                 => 'public',
+        'getgroups'                => 'public',
         'getnode'                  => 'public',
         'getnodes'                 => 'public',
         'getpost'                  => 'public',
@@ -1925,6 +1926,16 @@ class RestAPI {
                 } else {
                     // Group was found, send response.
                     $this->sendResponse($group);
+                }
+            case 'getgroups':
+                // Get the groups from XenForo.
+                $groups = $this->getXenAPI()->getGroups();
+                if (!$groups) {
+                    // Could not find any group, throw error.
+                    $this->throwError(4, 'group', $string);
+                } else {
+                    // Groups were found, send response.
+                    $this->sendResponse($groups);
                 }
             case 'getconversations':
                 /**
@@ -4095,6 +4106,11 @@ class XenAPI {
         // Get the group from the database.
         return $this->getDatabase()->fetchRow("SELECT * FROM `xf_user_group` WHERE `user_group_id` = " . $this->getDatabase()->quote($group) 
             . " OR `title` = " . $this->getDatabase()->quote($group) . " OR `user_title` = " . $this->getDatabase()->quote($group));
+    }
+
+    public function getGroups() {
+        // Get the groups list from the database. 
+        return $this->getDatabase()->fetchAll("SELECT * FROM `xf_user_group`");
     }
 
     /**
