@@ -2642,7 +2642,7 @@ class RestAPI {
                 *   - api.php?action=getUsers&value=C*
                 */
 
-                if ($this->hasRequest('value') && strpos($this->getRequest('value', ',')) !== false) {
+                if ($this->hasRequest('value') && strpos($this->getRequest('value'), ',') !== false) {
                     $userIds = explode(',', $this->getRequest('value'));
                     $results = [];
                     foreach ($userIds as $userId) {
